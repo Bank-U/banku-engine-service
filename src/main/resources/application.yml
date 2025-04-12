@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: banku-engine-service
+  profiles:
+    active: local
+  data:
+    mongodb:
+      uri: ${spring.data.mongodb.uri}
+  kafka:
+    consumer:
+      group-id: banku-user-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+
+jwt:
+  secret: ${jwt.secret}
+
+server:
+  port: 8083
+
+logging:
+  level:
+    com: DEBUG
+    org.springframework.security: INFO 
+
+openai:
+  api-key: ${openai.api-key}
+  model: ${openai.model}
+  prompts:
+    alert: ${openai.prompts.alert}
+    recommendation: ${openai.prompts.recommendation}
+
