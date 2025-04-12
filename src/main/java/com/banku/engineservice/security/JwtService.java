@@ -21,13 +21,7 @@ public class JwtService {
     private String secretKey;
 
     private Key getSigningKey() {
-        try {
-            byte[] keyBytes = secretKey.getBytes();
-            return Keys.hmacShaKeyFor(keyBytes);
-        } catch (Exception e) {
-            log.error("Error al generar la clave de firma", e);
-            throw new RuntimeException("Error al generar la clave de firma", e);
-        }
+        return Keys.hmacShaKeyFor(secretKey.getBytes());
     }
 
     public String extractUsername(String token) {
@@ -42,14 +36,12 @@ public class JwtService {
     public static String extractUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         
-        // Obtener el userId de los detalles de autenticación
         String userId = null;
         if (authentication != null && authentication.getDetails() instanceof Map) {
             Map<String, Object> details = (Map<String, Object>) authentication.getDetails();
             userId = (String) details.get("userId");
         }
         
-        // Si no se encuentra el userId, usar el nombre de usuario como fallback
         if (userId == null && authentication != null) {
             userId = authentication.getName();
         }
@@ -69,7 +61,6 @@ public class JwtService {
                 return (String) extraClaims.get("userId");
             }
             
-            // Si no está en extraClaims, intentar obtenerlo directamente
             return claims.get("userId", String.class);
         } catch (Exception e) {
             log.error("Error al extraer el userId del token", e);
