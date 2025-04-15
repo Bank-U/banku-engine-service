@@ -34,3 +34,15 @@ openai:
     alert: ${openai.prompts.alert}
     recommendation: ${openai.prompts.recommendation}
 
+springdoc:
+  swagger-ui:
+    path: /api/v1/engine/swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+    tryItOutEnabled: true
+    filter: true
+  api-docs:
+    path: /api/v1/engine/v3/api-docs
+  show-actuator: true
+  packages-to-scan: com.banku.engineservice.controller
+  paths-to-match: /api/v1/** 

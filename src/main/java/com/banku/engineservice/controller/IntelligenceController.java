@@ -7,8 +7,13 @@ import com.banku.engineservice.controller.dto.IntelligenceResponse;
 import com.banku.engineservice.security.JwtService;
 import com.banku.engineservice.service.IntelligenceService;
 
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/api/v1/engine/intelligence")
+@Tag(name = "Intelligence", description = "Intelligence APIs")
+@SecurityRequirement(name = "bearerAuth")
 public class IntelligenceController {
     
     private final IntelligenceService intelligenceService;
