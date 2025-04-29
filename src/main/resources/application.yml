@@ -25,6 +25,7 @@ server:
 logging:
   level:
     com: DEBUG
+    org.apache.kafka: INFO
     org.springframework.security: INFO 
 
 openai:

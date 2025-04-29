@@ -28,11 +28,10 @@ public class RecommendationAggregate extends Aggregate {
     public void apply(EngineEvent event) {
         if (event instanceof RecommendationCreatedEvent) {
             apply((RecommendationCreatedEvent) event);
-            this.version++;
         } else if (event instanceof RecommendationImplementedEvent) {
             apply((RecommendationImplementedEvent) event);
-            this.version++;
         }
+        this.version = event.getVersion();
     }
     
     protected void apply(RecommendationCreatedEvent event) {
