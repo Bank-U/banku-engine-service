@@ -10,8 +10,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.Instant;
-import java.util.List;
 
 @Service
 @Slf4j
@@ -22,7 +20,7 @@ public class KafkaConsumerService {
     private final ObjectMapper objectMapper;
     private final OpenAIService openAIService;
 
-    @KafkaListener(topics = "banku.openbanking", groupId = "engine-service-group")
+    @KafkaListener(topics = "banku.openbanking", groupId = "${spring.kafka.consumer.group-id}")
     public void processOpenBankingData(String message) {
         try {
             JsonNode data = objectMapper.readTree(message);
