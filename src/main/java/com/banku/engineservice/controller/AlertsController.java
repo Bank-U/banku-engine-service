@@ -10,11 +10,9 @@ import org.springframework.web.bind.annotation.*;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/api/v1/engine/alerts")
-@Slf4j
 @Tag(name = "Alerts", description = "Alerts APIs")
 @SecurityRequirement(name = "bearerAuth")
 public class AlertsController {

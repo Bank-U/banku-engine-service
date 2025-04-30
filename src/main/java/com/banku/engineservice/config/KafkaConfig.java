@@ -1,25 +1,30 @@
 package com.banku.engineservice.config;
 
 import org.apache.kafka.clients.admin.NewTopic;
-import org.apache.kafka.clients.producer.ProducerConfig;
-import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
-import org.springframework.kafka.core.DefaultKafkaProducerFactory;
-import org.springframework.kafka.core.KafkaTemplate;
-import org.springframework.kafka.core.ProducerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
-
+/**
+ * <h3>Kafka configuration for the engine service.</h3>
+ * <p>
+ * This configuration defines the Kafka topics and producer/consumer configurations.
+ * It includes:
+ * - Open banking topic
+ * - Alerts topic
+ * - Recommendations topic
+ * </p>
+ * <p>
+ *  <b>Only applicable for local development.</b>
+ * </p>
+ */
 @Configuration
 public class KafkaConfig {
 
     @Bean
     public NewTopic openbankingTopic() {
         return TopicBuilder.name("banku.openbanking")
-                .partitions(3)
+                .partitions(2)
                 .replicas(1)
                 .build();
     }
@@ -27,7 +32,7 @@ public class KafkaConfig {
     @Bean
     public NewTopic alertsTopic() {
         return TopicBuilder.name("banku.alerts")
-                .partitions(3)
+                .partitions(2)
                 .replicas(1)
                 .build();
     }
@@ -35,22 +40,8 @@ public class KafkaConfig {
     @Bean
     public NewTopic recommendationsTopic() {
         return TopicBuilder.name("banku.recommendations")
-                .partitions(3)
+                .partitions(2)
                 .replicas(1)
                 .build();
     }
-
-    @Bean
-    public ProducerFactory<String, String> producerFactory() {
-        Map<String, Object> configProps = new HashMap<>();
-        configProps.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-        configProps.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        configProps.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
-        return new DefaultKafkaProducerFactory<>(configProps);
-    }
-
-    @Bean
-    public KafkaTemplate<String, String> kafkaTemplate() {
-        return new KafkaTemplate<>(producerFactory());
-    }
-} 
+    } 
