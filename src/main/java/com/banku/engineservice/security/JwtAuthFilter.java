@@ -49,22 +49,20 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             final String username = jwtService.extractUsername(jwt);
             final String userId = jwtService.extractUserId(jwt);
             
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                if (jwtService.isTokenValid(jwt)) {
-                    // Crear un token de autenticación con el username y un rol básico
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            username,
-                            null,
-                            Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
-                    );
-                    
-                    // Añadir el userId a los detalles de autenticación
-                    Map<String, Object> details = new HashMap<>();
-                    details.put("userId", userId);
-                    authToken.setDetails(details);
-                    
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
-                }
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null && jwtService.isTokenValid(jwt)) {
+                // Crear un token de autenticación con el username y un rol básico
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                        username,
+                        null,
+                        Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"))
+                );
+                
+                // Añadir el userId a los detalles de autenticación
+                Map<String, Object> details = new HashMap<>();
+                details.put("userId", userId);
+                authToken.setDetails(details);
+
+                SecurityContextHolder.getContext().setAuthentication(authToken);
             }
         } catch (Exception e) {
             log.error("Error procesando el token JWT", e);
