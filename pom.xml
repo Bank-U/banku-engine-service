@@ -11,7 +11,7 @@
     
     <groupId>com.banku</groupId>
     <artifactId>engine-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>engine-service</name>
     <description>Banku Engine Service for AI-powered financial analysis</description>
     
