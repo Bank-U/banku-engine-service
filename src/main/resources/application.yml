@@ -22,7 +22,7 @@ jwt:
   secret: ${jwt.secret}
 
 server:
-  port: 8083
+  port: 8080
 
 logging:
   level:
