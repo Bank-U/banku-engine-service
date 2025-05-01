@@ -28,11 +28,10 @@ public class AlertAggregate extends Aggregate {
     public void apply(EngineEvent event) {
         if (event instanceof AlertCreatedEvent) {
             apply((AlertCreatedEvent) event);
-            this.version++;
         } else if (event instanceof AlertResolvedEvent) {
             apply((AlertResolvedEvent) event);
-            this.version++;
         }
+        this.version = event.getVersion();
     }
     
     protected void apply(AlertCreatedEvent event) {

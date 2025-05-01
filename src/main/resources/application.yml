@@ -7,8 +7,10 @@ spring:
     mongodb:
       uri: ${spring.data.mongodb.uri}
   kafka:
+    client:
+      id: ${spring.kafka.client.id}
     consumer:
-      group-id: banku-user-group
+      group-id: ${spring.kafka.consumer.group-id}
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
@@ -20,17 +22,30 @@ jwt:
   secret: ${jwt.secret}
 
 server:
-  port: 8083
+  port: 8080
 
 logging:
   level:
     com: DEBUG
+    org.apache.kafka: INFO
     org.springframework.security: INFO 
 
 openai:
-  api-key: ${openai.api-key}
+  api-key: ${openai.api.key}
   model: ${openai.model}
   prompts:
     alert: ${openai.prompts.alert}
     recommendation: ${openai.prompts.recommendation}
 
+springdoc:
+  swagger-ui:
+    path: /api/v1/engine/swagger-ui.html
+    operationsSorter: method
+    tagsSorter: alpha
+    tryItOutEnabled: true
+    filter: true
+  api-docs:
+    path: /api/v1/engine/v3/api-docs
+  show-actuator: true
+  packages-to-scan: com.banku.engineservice.controller
+  paths-to-match: /api/v1/** 

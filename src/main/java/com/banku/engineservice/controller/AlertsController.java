@@ -8,11 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import lombok.extern.slf4j.Slf4j;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 
 @RestController
 @RequestMapping("/api/v1/engine/alerts")
-@Slf4j
+@Tag(name = "Alerts", description = "Alerts APIs")
+@SecurityRequirement(name = "bearerAuth")
 public class AlertsController {
     
     @Autowired

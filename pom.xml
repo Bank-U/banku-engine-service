@@ -5,13 +5,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.3</version>
+        <version>3.4.4</version>
         <relativePath/>
     </parent>
     
     <groupId>com.banku</groupId>
     <artifactId>engine-service</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0.0-SNAPSHOT</version>
     <name>engine-service</name>
     <description>Banku Engine Service for AI-powered financial analysis</description>
     
@@ -89,6 +89,17 @@
             <artifactId>spring-security-test</artifactId>
             <scope>test</scope>
         </dependency>
+		<!-- SpringDoc OpenAPI -->
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>2.8.6</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-common</artifactId>
+			<version>2.8.6</version>
+		</dependency>
     </dependencies>
     
     <dependencyManagement>
