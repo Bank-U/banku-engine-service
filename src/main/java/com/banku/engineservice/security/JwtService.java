@@ -17,6 +17,8 @@ import java.util.function.Function;
 @Slf4j
 public class JwtService {
 
+    private static final String USER_ID_CLAIM = "userId";
+    
     @Value("${jwt.secret}")
     private String secretKey;
 
@@ -39,7 +41,7 @@ public class JwtService {
         String userId = null;
         if (authentication != null && authentication.getDetails() instanceof Map) {
             Map<String, Object> details = (Map<String, Object>) authentication.getDetails();
-            userId = (String) details.get("userId");
+            userId = (String) details.get(USER_ID_CLAIM);
         }
         
         if (userId == null && authentication != null) {
@@ -57,11 +59,11 @@ public class JwtService {
                     .getBody();
             
             Map<String, Object> extraClaims = claims.get("extraClaims", Map.class);
-            if (extraClaims != null && extraClaims.containsKey("userId")) {
-                return (String) extraClaims.get("userId");
+            if (extraClaims != null && extraClaims.containsKey(USER_ID_CLAIM)) {
+                return (String) extraClaims.get(USER_ID_CLAIM);
             }
             
-            return claims.get("userId", String.class);
+            return claims.get(USER_ID_CLAIM, String.class);
         } catch (Exception e) {
             log.error("Error al extraer el userId del token", e);
             return null;

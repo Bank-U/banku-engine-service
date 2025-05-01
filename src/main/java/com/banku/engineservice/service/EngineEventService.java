@@ -7,7 +7,6 @@ import com.banku.engineservice.event.EngineEvent;
 import com.banku.engineservice.repository.EngineEventRepository;
 import com.banku.engineservice.security.JwtService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,9 +19,12 @@ import java.util.stream.Collectors;
 @Slf4j
 public class EngineEventService {
     
-    @Autowired
-    private EngineEventRepository eventRepository;
+    private final EngineEventRepository eventRepository;
     
+    public EngineEventService(EngineEventRepository eventRepository) {
+        this.eventRepository = eventRepository;
+    }
+
     @Transactional
     public EngineEvent saveEvent(EngineEvent event) {
         if (event.getAggregateId() == null) {

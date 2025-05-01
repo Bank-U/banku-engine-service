@@ -26,10 +26,10 @@ public class RecommendationAggregate extends Aggregate {
     
     @Override
     public void apply(EngineEvent event) {
-        if (event instanceof RecommendationCreatedEvent) {
-            apply((RecommendationCreatedEvent) event);
-        } else if (event instanceof RecommendationImplementedEvent) {
-            apply((RecommendationImplementedEvent) event);
+        if (event instanceof RecommendationCreatedEvent recommendationCreatedEvent) {
+            apply(recommendationCreatedEvent);
+        } else if (event instanceof RecommendationImplementedEvent recommendationImplementedEvent) {
+            apply(recommendationImplementedEvent);
         }
         this.version = event.getVersion();
     }

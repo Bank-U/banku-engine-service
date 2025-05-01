@@ -2,7 +2,6 @@ package com.banku.engineservice.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.banku.engineservice.aggregate.AlertAggregate;
@@ -12,8 +11,11 @@ import com.banku.engineservice.controller.dto.IntelligenceResponse;
 @Service
 public class IntelligenceService {
     
-    @Autowired
-    private EngineEventService eventService;
+    private final EngineEventService eventService;
+
+    public IntelligenceService(EngineEventService eventService) {
+        this.eventService = eventService;
+    }
 
     public IntelligenceResponse getIntelligenceForUser(String userId) {
         IntelligenceResponse response = new IntelligenceResponse();
