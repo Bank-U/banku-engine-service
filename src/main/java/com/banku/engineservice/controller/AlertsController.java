@@ -4,7 +4,6 @@ import com.banku.engineservice.event.AlertResolvedEvent;
 import com.banku.engineservice.event.EngineEvent;
 import com.banku.engineservice.service.EngineEventService;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,9 +16,12 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 @SecurityRequirement(name = "bearerAuth")
 public class AlertsController {
     
-    @Autowired
-    private EngineEventService eventService;
-    
+    private final EngineEventService eventService;
+
+    public AlertsController(EngineEventService eventService) {
+        this.eventService = eventService;
+    }
+
     @PutMapping("/{id}/resolve")
     public ResponseEntity<EngineEvent> resolveAlert(@PathVariable String id) {
         EngineEvent engineEvent = eventService.updateEvent(id, new AlertResolvedEvent());

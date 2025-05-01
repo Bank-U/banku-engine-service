@@ -26,10 +26,10 @@ public class AlertAggregate extends Aggregate {
     
     @Override
     public void apply(EngineEvent event) {
-        if (event instanceof AlertCreatedEvent) {
-            apply((AlertCreatedEvent) event);
-        } else if (event instanceof AlertResolvedEvent) {
-            apply((AlertResolvedEvent) event);
+        if (event instanceof AlertCreatedEvent alertCreatedEvent) {
+            apply(alertCreatedEvent);
+        } else if (event instanceof AlertResolvedEvent alertResolvedEvent) {
+            apply(alertResolvedEvent);
         }
         this.version = event.getVersion();
     }
