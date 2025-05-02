@@ -1,8 +1,9 @@
 package com.banku.engineservice.service;
 
+import com.banku.engineservice.aggregate.UserAggregate;
+import com.banku.engineservice.repository.UserAggregateRepository;
 import com.banku.engineservice.event.AlertCreatedEvent;
 import com.banku.engineservice.event.RecommendationCreatedEvent;
-import com.banku.engineservice.event.EngineEvent.EventCategory;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,7 +19,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import jakarta.annotation.PostConstruct;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 public class OpenAIService {
 
     private final ObjectMapper objectMapper;
+    private final UserAggregateRepository userAggregateRepository;
     private OpenAIClient client;
     
     @Value("${openai.api-key}")
@@ -44,8 +45,9 @@ public class OpenAIService {
     @Value("${openai.prompts.recommendation}")
     private String recommendationPrompt;
     
-    public OpenAIService(ObjectMapper objectMapper) {
+    public OpenAIService(ObjectMapper objectMapper, UserAggregateRepository userAggregateRepository) {
         this.objectMapper = objectMapper;
+        this.userAggregateRepository = userAggregateRepository;
     }
     
     @PostConstruct
@@ -53,9 +55,9 @@ public class OpenAIService {
         client = OpenAIOkHttpClient.builder().apiKey(apiKey).build();
     }
 
-    public List<AlertCreatedEvent> generateAlerts(String userId, String financialData) {
+    public List<AlertCreatedEvent> generateAlerts(String userId, String financialData, String language) {
         try {
-            String response = callChatGPT(alertPrompt, financialData);
+            String response = callChatGPT(alertPrompt, financialData, userId, language);
             log.debug("Received Alerts response from OpenAI: {}", response);
 
             return parseAlertResponse(userId, response);
@@ -65,9 +67,9 @@ public class OpenAIService {
         }
     }
 
-    public List<RecommendationCreatedEvent> generateRecommendations(String userId, String financialData) {
+    public List<RecommendationCreatedEvent> generateRecommendations(String userId, String financialData, String language) {
         try {
-            String response = callChatGPT(recommendationPrompt, financialData);
+            String response = callChatGPT(recommendationPrompt, financialData, userId, language);
             log.debug("Received Recommendations response from OpenAI: {}", response);
 
             return parseRecommendationResponse(userId, response);
@@ -77,11 +79,14 @@ public class OpenAIService {
         }
     }
 
-    private String callChatGPT(String developerMessage, String transactionData) {
+    private String callChatGPT(String developerMessage, String transactionData, String userId, String language) {
+        // Replace language placeholder in the prompt
+        String localizedPrompt = developerMessage.replace("{{LANGUAGE}}", language);
+        log.info("############# Calling OpenAI with prompt: {}", localizedPrompt);
         ChatCompletionCreateParams createParamsBuilder = ChatCompletionCreateParams.builder()
             .model(ChatModel.GPT_4O_MINI)
             .maxCompletionTokens(2048)
-            .addDeveloperMessage(developerMessage)
+            .addDeveloperMessage(localizedPrompt)
             .addUserMessage(transactionData)
             .build();
 
