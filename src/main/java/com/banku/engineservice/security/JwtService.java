@@ -57,7 +57,7 @@ public class JwtService {
                     .build()
                     .parseClaimsJws(token)
                     .getBody();
-            
+                    
             Map<String, Object> extraClaims = claims.get("extraClaims", Map.class);
             if (extraClaims != null && extraClaims.containsKey(USER_ID_CLAIM)) {
                 return (String) extraClaims.get(USER_ID_CLAIM);
