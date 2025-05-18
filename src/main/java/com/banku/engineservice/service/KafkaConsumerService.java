@@ -11,9 +11,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -26,6 +28,7 @@ public class KafkaConsumerService {
     private final OpenAIService openAIService;
     private final UserEventService userEventService;
     private final UserAggregateRepository userAggregateRepository;
+    private final SimpMessagingTemplate messagingTemplate;
 
     @KafkaListener(topics = "banku.openbanking", groupId = "${spring.kafka.consumer.group-id}")
     public void processOpenBankingData(String message) {
@@ -37,8 +40,6 @@ public class KafkaConsumerService {
             UserAggregate user = userAggregateRepository.findById(userId);
             String language = user != null ? user.getPreferredLanguage() : "en";
             
-            log.info("############# Processing Open Banking data for user: {} with language: {}", userId, language);
-
             // Process account data
             if (data.has("accounts")) {
                 processAccountData(userId, data.get("accounts"));
@@ -48,7 +49,12 @@ public class KafkaConsumerService {
             if (data.has("transactions")) {
                 processTransactionDataWithAI(userId, data.get("transactions"), language);
             }
-            
+                        
+            // Notificar directamente al frontend
+            messagingTemplate.convertAndSend(
+                "/topic/user/" + userId, 
+                Map.of("type", "PROCESSING_COMPLETE", "userId", userId)
+            );
         } catch (Exception e) {
             log.error("Error processing Kafka message: {}", e.getMessage());
         }
