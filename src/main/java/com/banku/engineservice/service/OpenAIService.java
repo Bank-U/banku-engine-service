@@ -57,7 +57,7 @@ public class OpenAIService {
 
     public List<AlertCreatedEvent> generateAlerts(String userId, String financialData, String language) {
         try {
-            String response = callChatGPT(alertPrompt, financialData, userId, language);
+            String response = callChatGPT(alertPrompt, financialData, language);
             log.debug("Received Alerts response from OpenAI: {}", response);
 
             return parseAlertResponse(userId, response);
@@ -69,7 +69,7 @@ public class OpenAIService {
 
     public List<RecommendationCreatedEvent> generateRecommendations(String userId, String financialData, String language) {
         try {
-            String response = callChatGPT(recommendationPrompt, financialData, userId, language);
+            String response = callChatGPT(recommendationPrompt, financialData, language);
             log.debug("Received Recommendations response from OpenAI: {}", response);
 
             return parseRecommendationResponse(userId, response);
@@ -79,10 +79,10 @@ public class OpenAIService {
         }
     }
 
-    private String callChatGPT(String developerMessage, String transactionData, String userId, String language) {
+    private String callChatGPT(String developerMessage, String transactionData, String language) {
         // Replace language placeholder in the prompt
         String localizedPrompt = developerMessage.replace("{{LANGUAGE}}", language);
-        log.info("############# Calling OpenAI with prompt: {}", localizedPrompt);
+
         ChatCompletionCreateParams createParamsBuilder = ChatCompletionCreateParams.builder()
             .model(ChatModel.GPT_4O_MINI)
             .maxCompletionTokens(2048)
@@ -98,7 +98,7 @@ public class OpenAIService {
                 .collect(Collectors.joining());
     }
 
-    private List<AlertCreatedEvent> parseAlertResponse(String userId,String response) throws JsonProcessingException {
+    private List<AlertCreatedEvent> parseAlertResponse(String userId, String response) throws JsonProcessingException {
         List<Map<String, String>> alerts = objectMapper.readValue(response, new TypeReference<List<Map<String, String>>>() {});
         List<AlertCreatedEvent> events = new ArrayList<>();
         
